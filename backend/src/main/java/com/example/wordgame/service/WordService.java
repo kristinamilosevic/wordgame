@@ -3,6 +3,8 @@ package com.example.wordgame.service;
 import com.example.wordgame.model.WordEntry;
 import com.example.wordgame.util.PalindromeUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -11,6 +13,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class WordService {
 
     private final List<WordEntry> words = new CopyOnWriteArrayList<>();
+    private final RestTemplate restTemplate = new RestTemplate();
 
     public WordEntry processWord(String word) {
         if (word == null || word.trim().isEmpty()) {
@@ -52,7 +55,13 @@ public class WordService {
     }
 
     private boolean isEnglishWord(String word) {
-        return word.matches("^[a-zA-Z]+$");
+        String url = "https://api.dictionaryapi.dev/api/v2/entries/en/" + word.toLowerCase();
+        try {
+            restTemplate.getForObject(url, Object.class);
+            return true;
+        } catch (HttpClientErrorException e) {
+            return false;
+        }
     }
 
     private int calculateScore(String word) {
@@ -66,5 +75,15 @@ public class WordService {
         }
 
         return score;
+    }
+
+    public int getTotalScore() {
+        return words.stream()
+                .mapToInt(WordEntry::getScore)
+                .sum();
+    }
+
+    public void resetWords() {
+        words.clear();
     }
 }
