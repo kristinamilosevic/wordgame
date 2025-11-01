@@ -27,23 +27,38 @@ public class WordController {
             return ResponseEntity.ok(entry);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
         }
     }
 
     @GetMapping
-    public ResponseEntity<List<WordEntry>> getAllWords() {
-        return ResponseEntity.ok(wordService.getAllWords());
+    public ResponseEntity<?> getAllWords() {
+        try {
+            List<WordEntry> words = wordService.getAllWords();
+            return ResponseEntity.ok(words);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+        }
     }
 
     @GetMapping("/total-score")
-    public ResponseEntity<Integer> getTotalScore() {
-        int totalScore = wordService.getTotalScore();
-        return ResponseEntity.ok(totalScore);
+    public ResponseEntity<?> getTotalScore() {
+        try {
+            int totalScore = wordService.getTotalScore();
+            return ResponseEntity.ok(totalScore);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+        }
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> resetWords() {
-        wordService.resetWords();
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> resetWords() {
+        try {
+            wordService.resetWords();
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(Map.of("error", e.getMessage()));
+        }
     }
 }

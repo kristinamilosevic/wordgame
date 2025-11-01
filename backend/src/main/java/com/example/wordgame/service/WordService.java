@@ -54,7 +54,7 @@ public class WordService {
                 .toList();
     }
 
-    private boolean isEnglishWord(String word) {
+    protected  boolean isEnglishWord(String word) {
         String url = "https://api.dictionaryapi.dev/api/v2/entries/en/" + word.toLowerCase();
         try {
             restTemplate.getForObject(url, Object.class);

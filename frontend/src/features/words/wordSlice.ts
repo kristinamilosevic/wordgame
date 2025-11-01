@@ -96,7 +96,8 @@ export const resetWordsAsync = createAsyncThunk<
 const wordSlice = createSlice({
     name: "words",
     initialState,
-    reducers: {},
+    reducers: {
+    },
     extraReducers: (builder) => {
         builder
             .addCase(addWordAsync.pending, (state) => { state.loading = true; })

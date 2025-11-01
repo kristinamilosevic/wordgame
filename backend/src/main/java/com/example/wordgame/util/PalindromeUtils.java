@@ -4,7 +4,7 @@ public class PalindromeUtils {
 
     public static boolean isPalindrome(String word) {
         if (word == null) return false;
-        String cleaned = word.toLowerCase();
+        String cleaned = word.toLowerCase().trim();
         int i = 0, j = cleaned.length() - 1;
         while (i < j) {
             if (cleaned.charAt(i) != cleaned.charAt(j)) return false;
@@ -16,7 +16,7 @@ public class PalindromeUtils {
 
     public static boolean isAlmostPalindrome(String word) {
         if (word == null) return false;
-        String cleaned = word.toLowerCase();
+        String cleaned = word.toLowerCase().trim();
         int i = 0, j = cleaned.length() - 1;
         while (i < j) {
             if (cleaned.charAt(i) != cleaned.charAt(j)) {
