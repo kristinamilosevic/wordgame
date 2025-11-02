@@ -2,6 +2,7 @@ package com.example.wordgame.service;
 
 import com.example.wordgame.model.WordEntry;
 import com.example.wordgame.util.PalindromeUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.client.HttpClientErrorException;
@@ -12,6 +13,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Service
 public class WordService {
 
+    @Value("${dictionary.api.url}")
+    private String dictionaryApiUrl;
     private final List<WordEntry> words = new CopyOnWriteArrayList<>();
     private final RestTemplate restTemplate = new RestTemplate();
 
@@ -47,8 +50,8 @@ public class WordService {
                 .toList();
     }
 
-    protected  boolean isEnglishWord(String word) {
-        String url = "https://api.dictionaryapi.dev/api/v2/entries/en/" + word.toLowerCase();
+    protected boolean isEnglishWord(String word) {
+        String url = dictionaryApiUrl + word.toLowerCase();
         try {
             restTemplate.getForObject(url, Object.class);
             return true;
