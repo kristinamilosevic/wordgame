@@ -8,7 +8,7 @@
 To run backend:
 mvn spring-boot:run
 
-To run the functional tests, execute:
+To run the functional tests:
 mvn test -Dtest=WordgameFunctionalTest
 
 To run unit tests:
