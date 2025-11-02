@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchWordsAsync, resetWordsAsync } from "../features/words/wordSlice";
+import type { RootState, AppDispatch } from "../app/store";
 
 export const WordList: React.FC = () => {
-  const dispatch = useAppDispatch();
-  const words = useAppSelector((state) => state.words.words);
-  const loading = useAppSelector((state) => state.words.loading);
-  const totalScore = useAppSelector((state) => state.words.totalScore);
+  const dispatch = useDispatch<AppDispatch>(); 
+  const words = useSelector((state: RootState) => state.words.entities);
+  const loading = useSelector((state: RootState) => state.words.loading);
+  const totalScore = useSelector((state: RootState) => state.words.totalScore);
   const [highlightedWord, setHighlightedWord] = useState<string | null>(null);
 
   useEffect(() => {
@@ -26,7 +27,7 @@ export const WordList: React.FC = () => {
 
   const sortedWords = [...words].sort((a, b) => b.score - a.score);
 
-  if (loading)
+  if (loading === "pending")
     return <p className="mt-6 text-center text-gray-500 italic">Loading words...</p>;
 
   if (words.length === 0)
@@ -54,7 +55,6 @@ export const WordList: React.FC = () => {
             {sortedWords.map((w) => {
               const base = calculateBaseScore(w.word);
               const extra = w.palindrome ? 3 : w.almostPalindrome ? 2 : 0;
-
               return (
                 <tr
                   key={w.word}

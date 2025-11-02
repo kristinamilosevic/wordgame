@@ -1,16 +1,17 @@
 import { useState } from "react";
-import { useAppDispatch, useAppSelector } from "../app/hooks";
+import { useDispatch, useSelector } from "react-redux";
 import { addWordAsync } from "../features/words/wordSlice";
+import type { RootState, AppDispatch } from "../app/store";
 
 export const WordForm: React.FC = () => {
   const [word, setWord] = useState("");
-  const dispatch = useAppDispatch();
-  const error = useAppSelector((state) => state.words.error);
+  const dispatch = useDispatch<AppDispatch>(); 
+  const error = useSelector((state: RootState) => state.words.error);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!word.trim()) return;
-    dispatch(addWordAsync(word));
+    dispatch(addWordAsync(word)); 
     setWord("");
   };
 

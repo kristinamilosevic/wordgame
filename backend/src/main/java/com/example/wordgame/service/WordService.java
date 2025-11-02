@@ -24,28 +24,21 @@ public class WordService {
             throw new IllegalArgumentException("Word not found in English dictionary");
         }
 
-        int score = calculateScore(word);
-        boolean isPal = PalindromeUtils.isPalindrome(word);
-        boolean isAlmostPal = !isPal && PalindromeUtils.isAlmostPalindrome(word);
-
         Optional<WordEntry> existing = words.stream()
                 .filter(w -> w.getWord().equalsIgnoreCase(word))
                 .findFirst();
 
         if (existing.isPresent()) {
-            WordEntry oldEntry = existing.get();
-            int newScore = oldEntry.getScore() + score;
-
-            WordEntry updated = new WordEntry(word, newScore, isPal, isAlmostPal);
-
-            words.remove(oldEntry);
-            words.add(updated);
-            return updated;
-        } else {
-            WordEntry entry = new WordEntry(word, score, isPal, isAlmostPal);
-            words.add(entry);
-            return entry;
+            throw new IllegalArgumentException("This word has already been added");
         }
+
+        int score = calculateScore(word);
+        boolean isPal = PalindromeUtils.isPalindrome(word);
+        boolean isAlmostPal = !isPal && PalindromeUtils.isAlmostPalindrome(word);
+
+        WordEntry entry = new WordEntry(word, score, isPal, isAlmostPal);
+        words.add(entry);
+        return entry;
     }
 
     public List<WordEntry> getAllWords() {
